@@ -25,4 +25,9 @@ class UpdateRequest extends FormRequest
             'message' => 'required|string',                        //указываю ключ в бд и проверки
         ];
     }
+
+    public function messages()
+    {
+        return parent::messages();
+    }
 }

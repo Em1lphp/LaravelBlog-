@@ -16,7 +16,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ((int)auth()->user()->role !== User::ROLE_ADMIN) {  // Если авторизованный юзер не админ, то ошибка 404
+        if ((int)auth()->user(
+            )->role !== User::ROLE_ADMIN) {  // Если авторизованный юзер не администратор, то ошибка 404
             abort(404);
         }
 

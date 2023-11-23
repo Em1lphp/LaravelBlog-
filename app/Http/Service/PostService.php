@@ -13,14 +13,19 @@ class PostService
     public function store($data)
     {
         try {
-
             DB::beginTransaction();  // Начало транзакции для обеспечения целостности данных
 
             $tagIds = $data['tag_ids'];  // Извлечение и
             unset($data['tag_ids']);  // Удаление тегов из данных.
 
-            $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);  // Сохранение изображений в public директории
-            $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);  // Сохранение изображений в public директории
+            $data['preview_image'] = Storage::disk('public')->put(
+                '/images',
+                $data['preview_image']
+            );  // Сохранение изображений в public директории
+            $data['main_image']    = Storage::disk('public')->put(
+                '/images',
+                $data['main_image']
+            );  // Сохранение изображений в public директории
 
             $post = Post::firstOrCreate($data);  // Создание или обновление поста в базе данных
 
@@ -33,7 +38,7 @@ class PostService
             // Откат транзакции в случае ошибки
             DB::rollBack();
 
-            Log::error('Error storing post: ' . $exception->getMessage());  // Логирование ошибки
+            Log::error('Error storing post: '.$exception->getMessage());  // Логирование ошибки
 
             throw $exception;  // Пробрасываем исключение для обработки на уровне вызова
         }
@@ -42,7 +47,6 @@ class PostService
     public function update($data, $post)
     {
         try {
-
             DB::beginTransaction();  // Начало транзакции для обеспечения целостности данных
 
             $tagIds = $data['tag_ids'];  // Извлечение и
@@ -53,7 +57,10 @@ class PostService
             }
 
             if (isset($data['main_image'])) {
-            $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);  // Сохранение изображений в public директории.
+                $data['main_image'] = Storage::disk('public')->put(
+                    '/images',
+                    $data['main_image']
+                );  // Сохранение изображений в public директории.
             }
 
             $post->update($data);  // Обновление данных поста в базе данных
@@ -67,7 +74,7 @@ class PostService
             // Откат транзакции в случае ошибки
             DB::rollBack();
 
-            Log::error('Error updating post: ' . $exception->getMessage());  // Логирование ошибки
+            Log::error('Error updating post: '.$exception->getMessage());  // Логирование ошибки
 
             throw $exception;  // Пробрасываем исключение для обработки на уровне вызова.
         }

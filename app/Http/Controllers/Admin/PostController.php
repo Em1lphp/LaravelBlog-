@@ -14,6 +14,7 @@ class PostController extends BaseController  // Наследуюемся от Ba
     public function index()
     {
         $posts = Post::all();  // Получение всех постов из базы данных
+
         return view('admin.post.index', compact('posts'));  // Возврат view с передачей данных о постах
     }
 
@@ -21,7 +22,8 @@ class PostController extends BaseController  // Наследуюемся от Ba
     public function create()
     {
         $categories = Category::all();
-        $tags = Tag::all();
+        $tags       = Tag::all();
+
         return view('admin.post.create', compact('categories', 'tags'));  // Возврат view для создания нового поста
     }
 
@@ -30,7 +32,11 @@ class PostController extends BaseController  // Наследуюемся от Ba
     {
         $data = $request->validated();   // Проверка и получение валидированных данных из запроса
         $this->service->store($data);  // Использование сервиса
-        return redirect()->route('posts.index')->with('success', 'Пост успешно создан.');  // Перенаправление на страницу отображения постов
+
+        return redirect()->route('posts.index')->with(
+            'success',
+            'Пост успешно создан.'
+        );  // Перенаправление на страницу отображения постов
     }
 
 
@@ -43,8 +49,12 @@ class PostController extends BaseController  // Наследуюемся от Ba
     public function edit(Post $post)
     {
         $categories = Category::all();
-        $tags = Tag::all();
-        return view('admin.post.edit', compact('post', 'categories', 'tags'));  // Возврат view для редактирования конкретного поста
+        $tags       = Tag::all();
+
+        return view(
+            'admin.post.edit',
+            compact('post', 'categories', 'tags')
+        );  // Возврат view для редактирования конкретного поста
     }
 
 
@@ -52,7 +62,11 @@ class PostController extends BaseController  // Наследуюемся от Ba
     {
         $data = $request->validated();  // Проверка и получение валидированных данных из запроса
         $this->service->update($data, $post);  // Использование сервиса
-        return redirect()->route('posts.index', compact('post'))->with('success', 'Пост успешно обновлен.')->with('post', $post);  // Перенаправление на страницу отображения постов с информацией о редактируемом посте
+
+        return redirect()->route('posts.index', compact('post'))->with('success', 'Пост успешно обновлен.')->with(
+            'post',
+            $post
+        );  // Перенаправление на страницу отображения постов с информацией о редактируемом посте
     }
 
 
